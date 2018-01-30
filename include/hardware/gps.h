@@ -24,6 +24,12 @@
 
 #include <hardware/hardware.h>
 
+#ifdef __ARM_PCS_VFP
+#define FP_ATTRIB __attribute__((pcs("aapcs")))
+#else
+#define FP_ATTRIB
+#endif
+
 __BEGIN_DECLS
 
 /**
@@ -435,7 +441,7 @@ typedef struct {
      *  latitude and longitude are measured in degrees
      *  expected accuracy is measured in meters
      */
-    int  (*inject_location)(double latitude, double longitude, float accuracy);
+    int  (*inject_location)(double latitude, double longitude, float accuracy) FP_ATTRIB;
 
     /**
      * Specifies that the next call to start will not use the
@@ -923,7 +929,7 @@ typedef struct {
                                 double longitude, double radius_meters,
                                 int last_transition, int monitor_transitions,
                                 int notification_responsiveness_ms,
-                                int unknown_timer_ms);
+                                int unknown_timer_ms) FP_ATTRIB;
 
    /**
     * Pause monitoring a particular geofence.
